@@ -21,11 +21,11 @@ int main()
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
-	//hints.ai_flags = AI_PASSIVE;
+	hints.ai_flags = AI_PASSIVE;
 
 	// printf("here");
 
-	if((status = getaddrinfo( "172.26.183.102", PORT, &hints, &servinfo)) != 0){
+	if((status = getaddrinfo( NULL, PORT, &hints, &servinfo)) != 0){
 		fprintf(stderr, "getaddrinfo error: %s\n", gai_strerror(status));
 		return 1;
 	}

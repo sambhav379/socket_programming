@@ -7,7 +7,7 @@
 #include <netdb.h>
 
 #define PORT "3490"
-#define SERVER_ADDR "172.26.183.102"
+//#define SERVER_ADDR "172.26.183.102"
 
 int main(){
 	printf("herer");
@@ -15,8 +15,8 @@ int main(){
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
-
-	int status = getaddrinfo(SERVER_ADDR, PORT, &hints, &servinfo);
+	hints.ai_flags = AI_PASSIVE;
+	int status = getaddrinfo(NULL,PORT, &hints, &servinfo);
 
 	if(status != 0){
 		fprintf(stderr, "getaddrinfo error: %s\n", gai_strerror(status));
