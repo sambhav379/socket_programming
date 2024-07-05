@@ -5,24 +5,20 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include"header.h"
 
 #define PORT "3490"
 //#define SERVER_ADDR "172.26.183.102"
 
 int main(){
-	printf("herer");
+	//printf("herer");
 	struct addrinfo hints, *servinfo;
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
-	int status = getaddrinfo(NULL,PORT, &hints, &servinfo);
-
-	if(status != 0){
-		fprintf(stderr, "getaddrinfo error: %s\n", gai_strerror(status));
-		return 1;
-	}
-	printf("here1");
+	my_getaddrinfo(NULL,PORT, &hints, &servinfo);
+	//printf("here1");
 
 	int client_fd;
 	// struct addrinfo *p;
@@ -42,10 +38,10 @@ int main(){
 	// 	break;
 	// }
 
-	client_fd = socket(servinfo->ai_family, servinfo->ai_socktype, servinfo->ai_protocol);
-	printf("here2");
-	connect(client_fd, servinfo->ai_addr, servinfo->ai_addrlen);
-	printf("here3");
+	client_fd = socket_my(servinfo->ai_family, servinfo->ai_socktype, servinfo->ai_protocol);
+	//printf("here2");
+	connect_my(client_fd, servinfo->ai_addr, servinfo->ai_addrlen);
+	//printf("here3");
 
 	freeaddrinfo(servinfo);
 
@@ -53,15 +49,21 @@ int main(){
 	// 	fprintf(stderr, "client: failed to connect\n");
 	// 	return 2;
 	// }
+	
+	while(1){
+		char input[1024];
+		    if (fgets(input, sizeof(input), stdin) == NULL) {
+			perror("fgets");
+			return 5;
+		    }
+		    input[strcspn(input, "\n")] = '\0';
 
-	const char *hello = "HELLO FROM CLIENT 1!";
-
-	if(send(client_fd, hello, strlen(hello), 0) == -1){
-		perror("send");
-		return 3;
+		if(send(client_fd, input, strlen(input), 0) == -1){
+			perror("send");
+			return 3;
+		}
 	}
-
-	printf("Client: Hello msg sent from client!\n");
+	//printf("Client: Hello msg sent from client!\n");
 
 	// char buffer[1024];
 	// if(recv(client_fd, buffer, sizeof(buffer), 0) == -1){
